@@ -102,7 +102,7 @@ class MongoCommandCursorTest extends TestCase
         $reflection = new \ReflectionProperty($cursor, 'db');
         $reflection->setAccessible(true);
         $reflection->setValue($cursor, $databaseMock);
-        $cursor->setReadPreference(\MongoClient::RP_SECONDARY);
+        $cursor->setReadPreference(ReadPreference::SECONDARY);
 
         iterator_to_array($cursor);
 

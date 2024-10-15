@@ -981,15 +981,15 @@ class MongoCollectionTest extends TestCase
         $this->assertSame(['type' => \MongoClient::RP_PRIMARY], $collection->getReadPreference());
         $this->assertFalse($collection->getSlaveOkay());
 
-        $this->assertTrue($collection->setReadPreference(\MongoClient::RP_SECONDARY, [['a' => 'b']]));
+        $this->assertTrue($collection->setReadPreference(ReadPreference::SECONDARY, [['a' => 'b']]));
         $this->assertSame(['type' => \MongoClient::RP_SECONDARY, 'tagsets' => [['a' => 'b']]], $collection->getReadPreference());
         $this->assertTrue($collection->getSlaveOkay());
 
         $this->assertTrue($collection->setSlaveOkay(true));
-        $this->assertSame(['type' => \MongoClient::RP_SECONDARY_PREFERRED, 'tagsets' => [['a' => 'b']]], $collection->getReadPreference());
+        $this->assertSame(['type' => \MongoDB\Driver\ReadPreference::SECONDARY_PREFERRED, 'tagsets' => [['a' => 'b']]], $collection->getReadPreference());
 
         $this->assertTrue($collection->setSlaveOkay(false));
-        $this->assertMatches(['type' => \MongoClient::RP_PRIMARY], $collection->getReadPreference());
+        $this->assertMatches(['type' => \MongoDB\Driver\ReadPreference::PRIMARY], $collection->getReadPreference());
     }
 
     public function testReadPreferenceIsSetInDriver()
@@ -1672,7 +1672,7 @@ class MongoCollectionTest extends TestCase
         $document = ['_id' => new \MongoId($id), 'foo' => 'bar'];
         $collection->insert($document);
         $document = $collection->findAndModify(
-            ['_id' => new \MongoId($id)],
+            ['_id' => new MongoId($id)],
             ['_id' => new \MongoId($id), 'foo' => 'boo']
         );
         $this->assertSame('bar', $document['foo']);
